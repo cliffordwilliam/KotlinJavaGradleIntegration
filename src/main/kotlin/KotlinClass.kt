@@ -3,7 +3,7 @@ fun getKotlinGreeting(): String {
 }
 
 fun main() {
-    val javaObj = JavaClass()  // Calling the Java class from Kotlin
+    val javaObj = JavaClass()
     println(javaObj.greet())
-    println(getKotlinGreeting())  // Calling the Kotlin function from Kotlin
+    println(getKotlinGreeting())
 }
