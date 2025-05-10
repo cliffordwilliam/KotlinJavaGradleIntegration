@@ -1,0 +1,34 @@
+# Gradle
+.gradle/
+build/
+
+# Gradle Wrapper
+gradle/wrapper/gradle-wrapper.jar
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Eclipse
+.project
+.classpath
+
+# VS Code
+.vscode/
+
+# Java
+*.class
+*.log
+
+# Kotlin
+*.kotlin_model/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Java Maven .m2 repository (if using Maven in the future)
+.m2/
+
+# Other
+*.swp
