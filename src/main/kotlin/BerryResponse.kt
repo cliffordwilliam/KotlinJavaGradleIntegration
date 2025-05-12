@@ -1,3 +1,5 @@
+// represent berry and berry list response from raw json
+
 data class Berry(
     val name: String,
     val url: String,

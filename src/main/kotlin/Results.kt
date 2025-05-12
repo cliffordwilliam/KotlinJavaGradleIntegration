@@ -1,3 +1,5 @@
+// class that represent retrofit responses
+
 // sealed = my kids are the ones defined in me only!
 // out = T is for init only, methods in me cannot use T as its param
 sealed class Results<out T : Any> {

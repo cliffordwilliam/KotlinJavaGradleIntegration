@@ -1,3 +1,5 @@
+// define func sig for retrofit to create the real implementation in build time
+
 import retrofit2.http.GET
 import retrofit2.Call
 import UrlConstants

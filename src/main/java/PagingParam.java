@@ -1,9 +1,9 @@
+// class to represent be endpoint url pagination params (page and limit)
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class PagingParam {
-    // Class to represent pagination parameters (page and limit)
-    
     // Properties (page and limit values)
     private int mPage = 0;
     private int mLimit = 0;
