@@ -21,6 +21,11 @@ public class PaginatedList<T> implements BaseList<T> {
     public PaginatedList() { // shortcut version where you pass new instances
         this(new Pagination(), new ArrayList<T>());
     }
+    public PaginatedList(Builder builder) { // builder constructor
+        mPagination = builder.mPagination;
+        mList = new ArrayList<>(builder.mList.size()); // this is for optimization u can just pass it in normally np
+        mList.addAll(builder.mList);
+    }
     // getter
     public Pagination getPagination() {
         return mPagination;
@@ -95,9 +100,24 @@ public class PaginatedList<T> implements BaseList<T> {
         // props
         private Pagination mPagination;
         private List<T> mList;
+        // constructors
         public Builder() {
             mList = new ArrayList<>();
         }
-        
+        public Builder(PaginatedList<T> incomingPaginatedList) {
+            mList = new ArrayList<>();
+            mList.addAll(incomingPaginatedList.getList()); // could just pass in immediately too btw
+            mPagination = incomingPaginatedList.getPagination();
+        }
+        // building abilities
+        public Builder setList(List<T> list) {
+            mList = list;
+            return this;
+        }
+        public Builder setPagination (Pagination pagination) {
+            mPagination = pagination;
+            return this;
+        }
+        public PaginatedList build() {return new PaginatedList(this);}
     }
 }
