@@ -10,7 +10,7 @@ sealed class Results<out T : Any> {
     // error kid
     class Error(val exception: Throwable) : Results<Nothing>()
     // success? call map method, else return as is
-    fun <R: Any> map(map: T.() -> R): Results<R> {
+    fun <R: Any> map(map: T.() -> R): Results<R> { // map is this class method, it gives access to T that belongs to the class what this class wrap around
         return when(this) {
             is Success -> Success(data.map())
             is Empty -> Empty

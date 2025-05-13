@@ -1,92 +1,81 @@
-// Pagination state manager class with useful methods
-
 public class Pagination {
     // props
-    private long mTotal; // total items in db
-    private int mCurrentPage; // current offset
-    private int mTotalPage; // total pages depending on my limit
-    private int mPerPage; // the limit
-    private int mTotalCurrent; // not sure maybe the total items in current page?
-    // constructors
-    public Pagination(long total, int currentPage, int totalPage, int perPage, int totalCurrent) {  // classic all props
+    private int mOffset;  // current offset (page number * limit)
+    private int mLimit;   // items per page (limit)
+    private int mTotal;   // total items available (count from API)
+    private String mNextUrl; // URL for the next page, if available
+    private String mPreviousUrl; // URL for the previous page, if available
+
+    // constructor
+    public Pagination(int offset, int limit, int total, String nextUrl, String previousUrl) {
+        this.mOffset = offset;
+        this.mLimit = limit;
         this.mTotal = total;
-        this.mCurrentPage = currentPage;
-        this.mTotalPage = totalPage;
-        this.mPerPage = perPage;
-        this.mTotalCurrent = totalCurrent;
-    };
-    public Pagination() {  // optional shortcut all 0 props, calling the above all classic version
-        this(0, 0, 0, 0, 0);
+        this.mNextUrl = nextUrl;
+        this.mPreviousUrl = previousUrl;
     }
-    public Pagination(long total, int currentPage, int perPage) {  // what is this?
-        this.mTotal = total;
-        this.mCurrentPage = currentPage;
-        // this.mTotalPage = totalPage;
-        this.mPerPage = perPage;
-        // this.mTotalCurrent = totalCurrent;
-        if (total == 0) {
-            mTotalPage = 1;
-        } else {
-            mTotalPage = (int) Math.ceil((double) total / perPage);
-        }
-    };
+
+    public Pagination() { // shortcut version where you pass new instances
+        this(0, 0, 0, null, null);
+    }
+
     // getters
-    public long getTotal() {
+    public int getOffset() {
+        return mOffset;
+    }
+
+    public int getLimit() {
+        return mLimit;
+    }
+
+    public int getTotal() {
         return mTotal;
     }
-    public int getCurrentPage() {
-        return mCurrentPage;
+
+    public int getTotalPages() {
+        return (int) Math.ceil((double) mTotal / mLimit);
     }
-    public int getTotalPage() {
-        return mTotalPage;
+
+    public String getNextUrl() {
+        return mNextUrl;
     }
-    public int getPerPage() {
-        return mPerPage;
+
+    public String getPreviousUrl() {
+        return mPreviousUrl;
     }
-    public int getTotalCurrent() {
-        return mTotalCurrent;
+
+    // optional convenience methods for checking the availability of next/prev pages
+    public boolean hasNext() {
+        return mNextUrl != null && !mNextUrl.isEmpty();
     }
+
+    public boolean hasPrevious() {
+        return mPreviousUrl != null && !mPreviousUrl.isEmpty();
+    }
+
     // overrides
-    // my str representation for log or testing
     @Override
     public String toString() {
-        return "Total: " + mTotal;
+        return "Pagination { offset=" + mOffset + ", limit=" + mLimit + ", total=" + mTotal 
+                + ", nextUrl=" + mNextUrl + ", previousUrl=" + mPreviousUrl + " }";
     }
-    // use this when using this class as key, this is for quick lookups
+
     @Override
-    public boolean equals(Object givenObject) {
-        if (this == givenObject) { // point to same mem?
-            return true;
-        }
-        if (givenObject == null || getClass() != givenObject.getClass()) { // made from same class? from adsdsa = new Pagination();
-            return false; // not like its a kid of it so its ok, that is not the case here, must be exact same
-        }
-        Pagination pagination = (Pagination) givenObject; // cast Object type to Pagination type like TS to new variable pagination
-        if (mTotal != pagination.mTotal) {
-            return false;
-        }
-        if (mCurrentPage != pagination.mCurrentPage) {
-            return false;
-        }
-        if (mTotalPage != pagination.mTotalPage) {
-            return false;
-        }
-        if (mPerPage != pagination.mPerPage) {
-            return false;
-        }
-        return mTotalCurrent == pagination.mTotalCurrent;
-        // if (mTotalCurrent != pagination.mTotalCurrent) {
-        //     return false;
-        // }
-        // return true;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Pagination pagination = (Pagination) obj;
+        return mOffset == pagination.mOffset && mLimit == pagination.mLimit && mTotal == pagination.mTotal
+                && mNextUrl.equals(pagination.mNextUrl) && mPreviousUrl.equals(pagination.mPreviousUrl);
     }
+
     @Override
     public int hashCode() {
-        int result = (int) (mTotal ^ (mTotal >>> 32)); // we need all props in int, convert long to int
-        result = 31 * result + mCurrentPage; // not collision free perfect but to combine props into hash gotta accumulate and multiply by 31
-        result = 31 * result + mTotalPage; // so turn all to int, then combine all prop with 31 multiplier to make unique class hash msg dig
-        result = 31 * result + mPerPage;
-        result = 31 * result + mTotalCurrent;
+        int result = Integer.hashCode(mOffset);
+        result = 31 * result + Integer.hashCode(mLimit);
+        result = 31 * result + Integer.hashCode(mTotal);
+        result = 31 * result + (mNextUrl != null ? mNextUrl.hashCode() : 0);
+        result = 31 * result + (mPreviousUrl != null ? mPreviousUrl.hashCode() : 0);
         return result;
     }
 }

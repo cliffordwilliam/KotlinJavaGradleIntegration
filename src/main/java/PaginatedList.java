@@ -3,15 +3,15 @@
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gson.annotations.SerializedName;
-
-
+// map {
+//     PaginatedList(
+//         pagination = Pagination(it.count, it.next, it.previous),
+//         list = it.results
+//     )
+// }
 public class PaginatedList<T> implements BaseList<T> {
-    // props (grab from raw json by key like "a")
-    @SerializedName("a")
-    private Pagination mPagination; // pagination class state manager
-    @SerializedName("b")
-    private List<T> mList; // built in list that holds item T generic
+    private Pagination mPagination; // Holds pagination information like count, next, previous, pagination class state manager
+    private List<T> mList;           // Holds the list of Berry objects (or whatever the generic type is), built in list that holds item T generic
     // constructors
     public PaginatedList(Pagination pagination, List<T> list) { // classic version with all params
         mPagination = pagination;
@@ -38,6 +38,9 @@ public class PaginatedList<T> implements BaseList<T> {
     public void set(PaginatedList<T> newPaginatedList) { // pass me a new instance of me
         clearList(); // reset my props
         add(newPaginatedList); // dump incoming instance to update my props
+    }
+    public boolean isNextPageAvailable() {
+        return mPagination.getNextUrl() != null && !mPagination.getNextUrl().isEmpty();
     }
     // overrides
     @Override
@@ -76,10 +79,6 @@ public class PaginatedList<T> implements BaseList<T> {
     public void clearList() { // reset my props
         mList.clear();
         mPagination = new Pagination();
-    }
-    @Override
-    public boolean isNextPageAvailable() { // we still have more pages in front?
-        return mPagination.getCurrentPage() < mPagination.getTotalPage();
     }
     @Override
     public boolean equals(Object incomObject) {

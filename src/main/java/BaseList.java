@@ -11,5 +11,4 @@ public interface BaseList<T> {
     void insert(int position, T item);
     List<T> getList();
     void clearList();
-    boolean isNextPageAvailable();
 }
